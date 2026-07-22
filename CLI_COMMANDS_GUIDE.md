@@ -141,10 +141,13 @@ uvx locust==2.32.4 \
 
 ## 6. GitHub Actions Workflow Configuration Policy
 
-### Force Node 24 Execution
-To resolve Node 20 deprecation warnings on GitHub Actions runners, include this top-level environment variable in all `.github/workflows/*.yaml` files:
-
-```yaml
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-```
+### Upgrade Actions to Supported Versions (Do NOT use `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`)
+> [!IMPORTANT]
+> **Action Version Upgrades over Force Flags**: Do **NOT** set `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"`. Setting `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` causes the GitHub Actions runner to emit deprecation warning annotations on every step because the actions' metadata still targets older runtimes.
+>
+> Always upgrade GitHub Actions to their latest supported major versions:
+> * `google-github-actions/auth@v3` (v3 natively supports modern GitHub Actions runner runtimes)
+> * `google-github-actions/setup-gcloud@v3`
+> * `actions/setup-python@v5`
+> * `astral-sh/setup-uv@v5`
+> * `actions/checkout@v4`
