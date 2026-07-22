@@ -35,8 +35,10 @@ must proactively ask the user to clarify them before writing or modifying code:
 
 ## 2. Agent Skills & Capabilities
 
+* Always consult [CLI_COMMANDS_GUIDE.md](file:///Users/winggundamth/git/opsta-k8s-agent-15/CLI_COMMANDS_GUIDE.md) for the exact, pre-verified commands, flags, parameters, and IAM policies (`agents-cli`, `gcloud`, `gh`, `terraform`, `uv`, `vertexai` SDK) required for this repository before running CLI commands.
 * Always utilize your standard `agents-cli` toolset and commands for all
   initialization, packaging, local execution, and deployment tasks.
+* Always pass `--min-instances 0` explicitly when deploying with `agents-cli deploy` to comply with cost-scaling guidelines.
 * Consult local CLI help instructions if library syntax or parameters require
   clarification.
 
