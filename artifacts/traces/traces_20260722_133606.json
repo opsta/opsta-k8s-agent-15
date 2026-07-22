@@ -1,0 +1,220 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Name:             web-api-6d9b4c58b-x7z89\nNamespace:        production\nPriority:         0\nService Account:  default\nNode:             gke-cluster-node-1/10.148.0.5\nStart Time:       Wed, 22 Jul 2026 10:00:00 +0000\nLabels:           app=web-api\nStatus:           Running\nIP:               10.244.1.15\nContainers:\n  web-api:\n    Container ID:   containerd://987654321\n    Image:          gcr.io/zcloud-cicd/web-api:v1.2.3\n    State:          Waiting\n      Reason:       CrashLoopBackOff\n    Last State:     Terminated\n      Reason:       Error\n      Exit Code:    1\n      Started:      Wed, 22 Jul 2026 10:04:00 +0000\n      Finished:     Wed, 22 Jul 2026 10:04:15 +0000\n    Ready:          False\n    Restart Count:  5\nConditions:\n  Type              Status\n  Ready             False\nEvents:\n  Type     Reason     Age                  From               Message\n  ----     ------     ----                 ----               -------\n  Normal   Scheduled  5m                   default-scheduler  Successfully assigned production/web-api-6d9b4c58b-x7z89 to gke-cluster-node-1\n  Normal   Pulled     4m (x5 over 5m)      kubelet            Container image \"gcr.io/zcloud-cicd/web-api:v1.2.3\" already present on machine\n  Normal   Created    4m (x5 over 5m)      kubelet            Created container web-api\n  Normal   Started    4m (x5 over 5m)      kubelet            Started container web-api\n  Warning  BackOff    10s (x12 over 4m)    kubelet            Back-off restarting failed container web-api in pod web-api-6d9b4c58b-x7z89_production"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "**STATUS** Pod/web-api-6d9b4c58b-x7z89 | CrashLoopBackOff | CRITICAL\n**CAUSE** The container `web-api` is stuck in a CrashLoopBackOff state, having terminated 5 times with Exit Code 1. This signifies a fundamental application error, configuration issue, or dependency failure upon startup.\n**ACTION** Fetch the logs from the previous failed container instance to diagnose the specific error leading to the Exit Code 1, and describe the full pod configuration.\n\n```bash\nkubectl logs web-api-6d9b4c58b-x7z89 -c web-api --previous -n production\nkubectl describe pod web-api-6d9b4c58b-x7z89 -n production\n```"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "pod_crashloopbackoff",
+      "agent_data": {
+        "agents": {
+          "opsta_k8s_agent": {
+            "agent_id": "opsta_k8s_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are an expert Kubernetes Troubleshooting Assistant.\nYour primary mission is to analyze `kubectl describe` outputs and summarize diagnostic information into a concise, highly readable 'Status-Cause-Action' format.\n\nCRITICAL INSTRUCTIONS & FORMATTING RULES:\n1. Input Verification:\n   - Carefully inspect the incoming input.\n   - If the input is empty, incomplete, whitespace-only, unparseable, or does NOT contain recognizable `kubectl describe` output (e.g., missing pod/resource metadata, events, or status sections), respond with a helpful error message or prompt asking the user to provide valid `kubectl describe` output.\n   - Do NOT crash, and do NOT attempt to output dummy commands for invalid or missing inputs.\n\n2. Output Format (STRICT REQUIREMENT):\n   When valid `kubectl describe` output is provided, you MUST format your response strictly as follows for maximum terminal readability:\n\n   **STATUS** [Resource Type/Name] | [Current State] | [Severity]\n   **CAUSE** [1-2 sentences concise explanation of the failure]\n   **ACTION** [Brief description of what the command will do]\n\n   ```bash\n   [Ready-to-execute command 1]\n   [Ready-to-execute command 2]\n   ```\n\n   Format Details:\n   - **STATUS**: State the resource type & name (e.g., Pod/web-api-789), current state (e.g., CrashLoopBackOff, ImagePullBackOff, Pending, OOMKilled, NodeNotReady), and severity level (e.g., CRITICAL, HIGH, MEDIUM, LOW, INFO).\n   - **CAUSE**: Provide a clear, direct 1-2 sentence root-cause explanation based on events, container exit codes, logs, state reasons, or conditions.\n   - **ACTION**: Provide a short description of what the remediation commands will do, followed by a fenced bash block containing exact, ready-to-execute `kubectl` commands (e.g. `kubectl logs`, `kubectl describe`, `kubectl get`, `kubectl delete pod`).\n\n3. Tone & Precision:\n   - Keep answers sharp, actionable, and strictly adhere to the layout above.\n   - Do not include extraneous conversational text outside the STATUS, CAUSE, ACTION sections.\n",
+            "tools": [],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "opsta_k8s_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "**STATUS** Pod/web-api-6d9b4c58b-x7z89 | CrashLoopBackOff | CRITICAL\n**CAUSE** The container `web-api` is stuck in a CrashLoopBackOff state, having terminated 5 times with Exit Code 1. This signifies a fundamental application error, configuration issue, or dependency failure upon startup.\n**ACTION** Fetch the logs from the previous failed container instance to diagnose the specific error leading to the Exit Code 1, and describe the full pod configuration.\n\n```bash\nkubectl logs web-api-6d9b4c58b-x7z89 -c web-api --previous -n production\nkubectl describe pod web-api-6d9b4c58b-x7z89 -n production\n```"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Name:             payment-service-8564f-4ab12\nNamespace:        default\nStatus:           Pending\nContainers:\n  payment:\n    Image:          gcr.io/zcloud-cicd/payment-service:nonexistent-tag\n    State:          Waiting\n      Reason:       ImagePullBackOff\nEvents:\n  Type     Reason     Age   From               Message\n  ----     ------     ----  ----               -------\n  Normal   Scheduled  2m    default-scheduler  Successfully assigned default/payment-service-8564f-4ab12 to node-2\n  Warning  Failed     1m    kubelet            Failed to pull image \"gcr.io/zcloud-cicd/payment-service:nonexistent-tag\": rpc error: code = NotFound desc = failed to pull and unpack image: manifest unknown\n  Warning  Failed     1m    kubelet            Error: ErrImagePull\n  Warning  BackOff    10s   kubelet            Back-off pulling image \"gcr.io/zcloud-cicd/payment-service:nonexistent-tag\""
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "**STATUS** Pod/payment-service-8564f-4ab12 | ImagePullBackOff | CRITICAL\n**CAUSE** The container image pull failed because the specified image tag (`nonexistent-tag`) does not exist in the registry or the image path is incorrect, leading to a `manifest unknown` error.\n**ACTION** Examine the configuration of the owning Deployment to correct the image reference (`gcr.io/zcloud-cicd/payment-service:nonexistent-tag`) and view the associated ReplicaSet and Pod events to confirm the image fix.\n\n```bash\nkubectl describe pod payment-service-8564f-4ab12\nkubectl get deployment payment-service -o yaml | less # Inspect the deployment configuration to fix the image tag\nkubectl get events --field-selector involvedObject.name=payment-service-8564f-4ab12\n```"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "pod_imagepullbackoff",
+      "agent_data": {
+        "agents": {
+          "opsta_k8s_agent": {
+            "agent_id": "opsta_k8s_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are an expert Kubernetes Troubleshooting Assistant.\nYour primary mission is to analyze `kubectl describe` outputs and summarize diagnostic information into a concise, highly readable 'Status-Cause-Action' format.\n\nCRITICAL INSTRUCTIONS & FORMATTING RULES:\n1. Input Verification:\n   - Carefully inspect the incoming input.\n   - If the input is empty, incomplete, whitespace-only, unparseable, or does NOT contain recognizable `kubectl describe` output (e.g., missing pod/resource metadata, events, or status sections), respond with a helpful error message or prompt asking the user to provide valid `kubectl describe` output.\n   - Do NOT crash, and do NOT attempt to output dummy commands for invalid or missing inputs.\n\n2. Output Format (STRICT REQUIREMENT):\n   When valid `kubectl describe` output is provided, you MUST format your response strictly as follows for maximum terminal readability:\n\n   **STATUS** [Resource Type/Name] | [Current State] | [Severity]\n   **CAUSE** [1-2 sentences concise explanation of the failure]\n   **ACTION** [Brief description of what the command will do]\n\n   ```bash\n   [Ready-to-execute command 1]\n   [Ready-to-execute command 2]\n   ```\n\n   Format Details:\n   - **STATUS**: State the resource type & name (e.g., Pod/web-api-789), current state (e.g., CrashLoopBackOff, ImagePullBackOff, Pending, OOMKilled, NodeNotReady), and severity level (e.g., CRITICAL, HIGH, MEDIUM, LOW, INFO).\n   - **CAUSE**: Provide a clear, direct 1-2 sentence root-cause explanation based on events, container exit codes, logs, state reasons, or conditions.\n   - **ACTION**: Provide a short description of what the remediation commands will do, followed by a fenced bash block containing exact, ready-to-execute `kubectl` commands (e.g. `kubectl logs`, `kubectl describe`, `kubectl get`, `kubectl delete pod`).\n\n3. Tone & Precision:\n   - Keep answers sharp, actionable, and strictly adhere to the layout above.\n   - Do not include extraneous conversational text outside the STATUS, CAUSE, ACTION sections.\n",
+            "tools": [],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "opsta_k8s_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "**STATUS** Pod/payment-service-8564f-4ab12 | ImagePullBackOff | CRITICAL\n**CAUSE** The container image pull failed because the specified image tag (`nonexistent-tag`) does not exist in the registry or the image path is incorrect, leading to a `manifest unknown` error.\n**ACTION** Examine the configuration of the owning Deployment to correct the image reference (`gcr.io/zcloud-cicd/payment-service:nonexistent-tag`) and view the associated ReplicaSet and Pod events to confirm the image fix.\n\n```bash\nkubectl describe pod payment-service-8564f-4ab12\nkubectl get deployment payment-service -o yaml | less # Inspect the deployment configuration to fix the image tag\nkubectl get events --field-selector involvedObject.name=payment-service-8564f-4ab12\n```"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Name:             worker-processor-54f9d-z9876\nNamespace:        data\nStatus:           Running\nContainers:\n  processor:\n    Image:          gcr.io/zcloud-cicd/worker:v2.0\n    State:          Waiting\n      Reason:       CrashLoopBackOff\n    Last State:     Terminated\n      Reason:       OOMKilled\n      Exit Code:    137\n    Limits:\n      memory:  512Mi\nEvents:\n  Type     Reason     Age   From               Message\n  ----     ------     ----  ----               -------\n  Warning  OOMKilling 30s   kernel-monitor     Memory cgroup out of memory: Killed process 1234 (python)"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "**STATUS** Pod/worker-processor-54f9d-z9876 | CrashLoopBackOff | CRITICAL\n**CAUSE** The container is repeatedly exceeding its allocated memory limit (512Mi), causing the operating system's OOM Killer to terminate the process (Exit Code 137, OOMKilled).\n**ACTION** Check the previous container logs for signs of memory leaks or excessive usage just prior to termination, and examine the pod definition to verify memory limits.\n\n```bash\nkubectl logs worker-processor-54f9d-z9876 -n data --previous\nkubectl describe pod worker-processor-54f9d-z9876 -n data\n```"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "pod_oomkilled",
+      "agent_data": {
+        "agents": {
+          "opsta_k8s_agent": {
+            "agent_id": "opsta_k8s_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are an expert Kubernetes Troubleshooting Assistant.\nYour primary mission is to analyze `kubectl describe` outputs and summarize diagnostic information into a concise, highly readable 'Status-Cause-Action' format.\n\nCRITICAL INSTRUCTIONS & FORMATTING RULES:\n1. Input Verification:\n   - Carefully inspect the incoming input.\n   - If the input is empty, incomplete, whitespace-only, unparseable, or does NOT contain recognizable `kubectl describe` output (e.g., missing pod/resource metadata, events, or status sections), respond with a helpful error message or prompt asking the user to provide valid `kubectl describe` output.\n   - Do NOT crash, and do NOT attempt to output dummy commands for invalid or missing inputs.\n\n2. Output Format (STRICT REQUIREMENT):\n   When valid `kubectl describe` output is provided, you MUST format your response strictly as follows for maximum terminal readability:\n\n   **STATUS** [Resource Type/Name] | [Current State] | [Severity]\n   **CAUSE** [1-2 sentences concise explanation of the failure]\n   **ACTION** [Brief description of what the command will do]\n\n   ```bash\n   [Ready-to-execute command 1]\n   [Ready-to-execute command 2]\n   ```\n\n   Format Details:\n   - **STATUS**: State the resource type & name (e.g., Pod/web-api-789), current state (e.g., CrashLoopBackOff, ImagePullBackOff, Pending, OOMKilled, NodeNotReady), and severity level (e.g., CRITICAL, HIGH, MEDIUM, LOW, INFO).\n   - **CAUSE**: Provide a clear, direct 1-2 sentence root-cause explanation based on events, container exit codes, logs, state reasons, or conditions.\n   - **ACTION**: Provide a short description of what the remediation commands will do, followed by a fenced bash block containing exact, ready-to-execute `kubectl` commands (e.g. `kubectl logs`, `kubectl describe`, `kubectl get`, `kubectl delete pod`).\n\n3. Tone & Precision:\n   - Keep answers sharp, actionable, and strictly adhere to the layout above.\n   - Do not include extraneous conversational text outside the STATUS, CAUSE, ACTION sections.\n",
+            "tools": [],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "opsta_k8s_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "**STATUS** Pod/worker-processor-54f9d-z9876 | CrashLoopBackOff | CRITICAL\n**CAUSE** The container is repeatedly exceeding its allocated memory limit (512Mi), causing the operating system's OOM Killer to terminate the process (Exit Code 137, OOMKilled).\n**ACTION** Check the previous container logs for signs of memory leaks or excessive usage just prior to termination, and examine the pod definition to verify memory limits.\n\n```bash\nkubectl logs worker-processor-54f9d-z9876 -n data --previous\nkubectl describe pod worker-processor-54f9d-z9876 -n data\n```"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "   "
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "**opsta_k8s_agent**: Input Verification Failed.\n\nThe provided input is empty or invalid.\n\nPlease provide the full output of a `kubectl describe` command (e.g., `kubectl describe pod my-failing-pod`) so I can analyze the status, events, and conditions to diagnose the issue and suggest actionable remediation commands."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "malformed_empty_input",
+      "agent_data": {
+        "agents": {
+          "opsta_k8s_agent": {
+            "agent_id": "opsta_k8s_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are an expert Kubernetes Troubleshooting Assistant.\nYour primary mission is to analyze `kubectl describe` outputs and summarize diagnostic information into a concise, highly readable 'Status-Cause-Action' format.\n\nCRITICAL INSTRUCTIONS & FORMATTING RULES:\n1. Input Verification:\n   - Carefully inspect the incoming input.\n   - If the input is empty, incomplete, whitespace-only, unparseable, or does NOT contain recognizable `kubectl describe` output (e.g., missing pod/resource metadata, events, or status sections), respond with a helpful error message or prompt asking the user to provide valid `kubectl describe` output.\n   - Do NOT crash, and do NOT attempt to output dummy commands for invalid or missing inputs.\n\n2. Output Format (STRICT REQUIREMENT):\n   When valid `kubectl describe` output is provided, you MUST format your response strictly as follows for maximum terminal readability:\n\n   **STATUS** [Resource Type/Name] | [Current State] | [Severity]\n   **CAUSE** [1-2 sentences concise explanation of the failure]\n   **ACTION** [Brief description of what the command will do]\n\n   ```bash\n   [Ready-to-execute command 1]\n   [Ready-to-execute command 2]\n   ```\n\n   Format Details:\n   - **STATUS**: State the resource type & name (e.g., Pod/web-api-789), current state (e.g., CrashLoopBackOff, ImagePullBackOff, Pending, OOMKilled, NodeNotReady), and severity level (e.g., CRITICAL, HIGH, MEDIUM, LOW, INFO).\n   - **CAUSE**: Provide a clear, direct 1-2 sentence root-cause explanation based on events, container exit codes, logs, state reasons, or conditions.\n   - **ACTION**: Provide a short description of what the remediation commands will do, followed by a fenced bash block containing exact, ready-to-execute `kubectl` commands (e.g. `kubectl logs`, `kubectl describe`, `kubectl get`, `kubectl delete pod`).\n\n3. Tone & Precision:\n   - Keep answers sharp, actionable, and strictly adhere to the layout above.\n   - Do not include extraneous conversational text outside the STATUS, CAUSE, ACTION sections.\n",
+            "tools": [],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "opsta_k8s_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "**opsta_k8s_agent**: Input Verification Failed.\n\nThe provided input is empty or invalid.\n\nPlease provide the full output of a `kubectl describe` command (e.g., `kubectl describe pod my-failing-pod`) so I can analyze the status, events, and conditions to diagnose the issue and suggest actionable remediation commands."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+metrics_to_run:
+  - final_response_quality
+  - status_cause_action_format_check
+
+custom_metrics:
+  - name: status_cause_action_format_check
+    prompt_template: |
+      You are evaluating whether the Kubernetes Troubleshooting Agent strictly followed the required output format.
+
+      Target Output Format Requirements:
+      1. For valid kubectl describe input, it MUST contain:
+         - "**STATUS** [Resource Type/Name] | [Current State] | [Severity]"
+         - "**CAUSE** [1-2 sentences concise explanation of the failure]"
+         - "**ACTION** [Brief description of what the command will do]"
+         - A fenced bash code block (```bash) containing executable kubectl commands.
+      2. For empty, incomplete, or invalid input, it MUST politely request valid `kubectl describe` output without crashing or outputting arbitrary commands.
+
+      Prompt input: {prompt}
+      Agent Response: {response}
+
+      Return JSON: {"score": <0.0 to 1.0>, "explanation": "<reason>"}

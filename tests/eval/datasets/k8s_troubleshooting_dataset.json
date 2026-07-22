@@ -1,0 +1,48 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "pod_crashloopbackoff",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Name:             web-api-6d9b4c58b-x7z89\nNamespace:        production\nPriority:         0\nService Account:  default\nNode:             gke-cluster-node-1/10.148.0.5\nStart Time:       Wed, 22 Jul 2026 10:00:00 +0000\nLabels:           app=web-api\nStatus:           Running\nIP:               10.244.1.15\nContainers:\n  web-api:\n    Container ID:   containerd://987654321\n    Image:          gcr.io/zcloud-cicd/web-api:v1.2.3\n    State:          Waiting\n      Reason:       CrashLoopBackOff\n    Last State:     Terminated\n      Reason:       Error\n      Exit Code:    1\n      Started:      Wed, 22 Jul 2026 10:04:00 +0000\n      Finished:     Wed, 22 Jul 2026 10:04:15 +0000\n    Ready:          False\n    Restart Count:  5\nConditions:\n  Type              Status\n  Ready             False\nEvents:\n  Type     Reason     Age                  From               Message\n  ----     ------     ----                 ----               -------\n  Normal   Scheduled  5m                   default-scheduler  Successfully assigned production/web-api-6d9b4c58b-x7z89 to gke-cluster-node-1\n  Normal   Pulled     4m (x5 over 5m)      kubelet            Container image \"gcr.io/zcloud-cicd/web-api:v1.2.3\" already present on machine\n  Normal   Created    4m (x5 over 5m)      kubelet            Created container web-api\n  Normal   Started    4m (x5 over 5m)      kubelet            Started container web-api\n  Warning  BackOff    10s (x12 over 4m)    kubelet            Back-off restarting failed container web-api in pod web-api-6d9b4c58b-x7z89_production"
+          }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "pod_imagepullbackoff",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Name:             payment-service-8564f-4ab12\nNamespace:        default\nStatus:           Pending\nContainers:\n  payment:\n    Image:          gcr.io/zcloud-cicd/payment-service:nonexistent-tag\n    State:          Waiting\n      Reason:       ImagePullBackOff\nEvents:\n  Type     Reason     Age   From               Message\n  ----     ------     ----  ----               -------\n  Normal   Scheduled  2m    default-scheduler  Successfully assigned default/payment-service-8564f-4ab12 to node-2\n  Warning  Failed     1m    kubelet            Failed to pull image \"gcr.io/zcloud-cicd/payment-service:nonexistent-tag\": rpc error: code = NotFound desc = failed to pull and unpack image: manifest unknown\n  Warning  Failed     1m    kubelet            Error: ErrImagePull\n  Warning  BackOff    10s   kubelet            Back-off pulling image \"gcr.io/zcloud-cicd/payment-service:nonexistent-tag\""
+          }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "pod_oomkilled",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Name:             worker-processor-54f9d-z9876\nNamespace:        data\nStatus:           Running\nContainers:\n  processor:\n    Image:          gcr.io/zcloud-cicd/worker:v2.0\n    State:          Waiting\n      Reason:       CrashLoopBackOff\n    Last State:     Terminated\n      Reason:       OOMKilled\n      Exit Code:    137\n    Limits:\n      memory:  512Mi\nEvents:\n  Type     Reason     Age   From               Message\n  ----     ------     ----  ----               -------\n  Warning  OOMKilling 30s   kernel-monitor     Memory cgroup out of memory: Killed process 1234 (python)"
+          }
+        ]
+      }
+    },
+    {
+      "eval_case_id": "malformed_empty_input",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "   "
+          }
+        ]
+      }
+    }
+  ]
+}
