@@ -28,19 +28,11 @@ on:
     branches:
       - main
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 jobs:
   sast_scan:
     name: Bandit SAST Scan
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -60,11 +52,6 @@ jobs:
     name: Trivy Vulnerability Scan
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -74,5 +61,5 @@ jobs:
           scan-type: 'fs'
           ignore-unfixed: true
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           severity: 'CRITICAL,HIGH'

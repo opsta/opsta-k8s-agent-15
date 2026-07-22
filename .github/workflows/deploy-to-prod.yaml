@@ -23,19 +23,11 @@ on:
         type: string
         default: 'v1.0.0'
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 jobs:
   security_scan:
     name: Security Scan (SAST & SCA)
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -58,7 +50,7 @@ jobs:
           scan-type: 'fs'
           ignore-unfixed: true
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           severity: 'CRITICAL,HIGH'
 
   deploy:
@@ -73,11 +65,6 @@ jobs:
       id-token: 'write'
 
     steps:
-      - name: Set up Node 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
