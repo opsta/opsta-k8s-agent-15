@@ -14,19 +14,17 @@
 
 name: Deploy to Staging
 
-# Staging trigger: Automate deployment triggered only by code files or code directory changes on main branch.
-# DISABLED INITIALLY per project requirements. Uncomment push block below to enable automatic deployment on push.
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'app/**'
-  #     - 'tests/**'
-  #     - 'deployment/**'
-  #     - 'uv.lock'
-  #     - 'requirements.txt'
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'tests/**'
+      - 'deployment/**'
+      - 'uv.lock'
+      - 'requirements.txt'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
