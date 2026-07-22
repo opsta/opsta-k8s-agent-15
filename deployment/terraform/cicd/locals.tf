@@ -37,16 +37,17 @@ locals {
     "telemetry.googleapis.com",
   ]
 
-  deploy_project_ids = {
+  deploy_project_ids = var.prod_project_id == var.staging_project_id ? {
+    staging = var.staging_project_id
+  } : {
     prod    = var.prod_project_id
     staging = var.staging_project_id
   }
 
-  all_project_ids = [
+  all_project_ids = distinct([
     var.cicd_runner_project_id,
     var.prod_project_id,
     var.staging_project_id
-  ]
+  ])
 
 }
-
